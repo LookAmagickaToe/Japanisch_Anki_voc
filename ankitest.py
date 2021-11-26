@@ -9,14 +9,15 @@ import re
 
 def einfügen(einträge, fn):
     
-    pfad = r"C:\Users\maxim\Desktop\TUM\Japanisch\\"    # CHANGE THIS DIRECTORY (DONT FORGET \\ AT THE END)
-    
+    pfad = r"" #r"C:\Users\maxim\Desktop\TUM\Japanisch\\"    # CHANGE THIS DIRECTORY (DONT FORGET \\ AT THE END)
+    if pfad == "":
+        pfad = os.getcwd()+"\\Decks\\"
     my_deck = genanki.Deck(1607392320, name = fn, description = 'genereated Deck from '+fn+" file")
     for key in einträge.keys():
         my_note = genanki.Note(genanki.BASIC_AND_REVERSED_CARD_MODEL, fields = [key, einträge.get(key)])
         my_deck.add_note(my_note)
     genanki.Package(my_deck).write_to_file(pfad+fn+'.apkg')
-    print("All done: ",pfad+fn+'.apkg\n')
+    print(fn+" done: ",pfad+fn+'.apkg\n')
     
 def dict_erstellen():
     t = text.split("\n")
@@ -64,7 +65,9 @@ def find_files(path, name, st, end):
    return [f for f in os.listdir(path) if f.startswith(name) and
            int(re.compile(r'\d{1,10}').findall(f)[0])>=st and int(re.compile(r'\d{1,10}').findall(f)[0])<=end]
 
-path = r"C:\Users\maxim\Desktop\Codes\Anki_Automation"      #CHANGE LOC OF PDF
+path = r"" #r"C:\Users\maxim\Desktop\Codes\Anki_Automation"      #CHANGE LOC OF PDF to customize
+if path == "":
+    path = os.getcwd()+"\\VocPdf"
 zeichen = ["[", "]"]
 while True:
     fn_o = input("Enter File name: (q for exit)")
@@ -77,23 +80,28 @@ while True:
     end = 0
     einträge = {}
 
-    if len(fn)==2:
+    if len(fn)>=2:
         if fn[1] != "":
             st, end = fn[1].split("-")
             st, end = int(st), int(end)
             
             for name in find_files(path, fn[0].split(".")[0], st, end):   #concatinating all files in range st to end+1 matching name
-                with pdfplumber.open(name) as temp:
+                einträge = {}
+                with pdfplumber.open(path+"\\"+name) as temp:
                     for n in range(len(temp.pages)):    
                         text = temp.pages[n].extract_text()
+                            
                         dict_erstellen()
+                if len(fn)==3 and fn[2] == "-s":
+                    einfügen(einträge, name.split(".")[0])
+            print("All Done Successfully!")
         else:
             print("Wrong input format e.g: voc 1-10")
             continue
     elif len(fn) == 1:
         fn = fn[0]
         try:
-            with pdfplumber.open(fn) as temp:
+            with pdfplumber.open(path+"\\"+fn) as temp:
                 for n in range(len(temp.pages)):
                     text = temp.pages[n].extract_text()     #get text
                     dict_erstellen()                        #add to dictionary
@@ -103,7 +111,8 @@ while True:
     else:
         print("Wrong input format or file")
         continue
-    
+    if len(fn)==3 and fn[2] == "-s":
+        continue
     print("Anzahl erstellter Einträge:", len(einträge.keys()))
     e = input("einträge anzeigen?(y)")
     if e == "y":
