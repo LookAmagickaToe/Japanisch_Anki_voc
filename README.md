@@ -7,10 +7,10 @@ SETUP:
         import genanki
         import PyPDF2 as pdf
         import pdfplumber
-    The Resulting Deck will be saved in a folder specified in ln 10
+    You can Specify your own Paths, from where it should take the pdfs from and where to save the Decks to.
+        - The Resulting Deck will be saved in a folder specified in ln 10
+        - You need to specify the location of the Pdf file/s in ln 65
     The Deckname will be the name of the Inputfile
-
-    You need to specify the location of the Pdf file/s in ln 65
 
 INPUT:
     you can either put in the filename e.g. "voc6.pdf" or write a filename to match and afterwards the numeration. The result will be written into one package with the name of the last used file. 
