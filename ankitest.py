@@ -119,5 +119,6 @@ while True:
         for key in einträge.keys():
             print(key," ",einträge.get(key))
     e = input("Deck erstellen? (y)")
+    fn=fn_o
     if e == "y":
         einfügen(einträge, fn.split(".")[0])
