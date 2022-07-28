@@ -1,4 +1,4 @@
-# Japanisch_Anki_voc
+# Japanisch_Anki_voc TUM A1.1 & A1.2
 Automated Creation of Anki Decks from given Voc.PDF
 
 SETUP:
